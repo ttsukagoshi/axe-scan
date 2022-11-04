@@ -1,0 +1,41 @@
+---
+#############################
+#############################
+## JavaScript Linter rules ##
+#############################
+#############################
+
+############
+# Env Vars #
+############
+env:
+  es2021: true
+  node: true
+
+###############
+# Global Vars #
+###############
+# globals:
+
+###############
+# Parser vars #
+###############
+parser: '@typescript-eslint/parser'
+parserOptions:
+  ecmaVersion: 2018
+  sourceType: module
+
+###########
+# Plugins #
+###########
+extends:
+  - 'eslint:recommended'
+  - 'plugin:prettier/recommended'
+plugins:
+  - '@typescript-eslint'
+#########
+# Rules #
+#########
+# rules:
+#   no-useless-escape: warn
+#   semi: error
