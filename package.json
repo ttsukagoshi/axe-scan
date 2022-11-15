@@ -1,7 +1,7 @@
 {
   "name": "axe-scan",
   "version": "0.1.0",
-  "description": "A Node.js package to test web accessibility on multiple web pages based on a list of URLs in a text file. Uses @axe-core/puppeteer as its testing engine.",
+  "description": "A Node.js package to test web accessibility on multiple web pages based on a list of URLs in a text file.",
   "type": "module",
   "exports": "./build/src/index.js",
   "main": "build/src/index.js",
@@ -13,6 +13,7 @@
     "build/src"
   ],
   "scripts": {
+    "build": "npx tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -32,6 +33,7 @@
   },
   "homepage": "https://github.com/ttsukagoshi/axe-scan#readme",
   "devDependencies": {
+    "@types/inquirer": "^9.0.3",
     "@typescript-eslint/eslint-plugin": "^5.36.1",
     "@typescript-eslint/parser": "^5.36.1",
     "eslint": "^8.23.0",
@@ -43,6 +45,8 @@
   "dependencies": {
     "@axe-core/puppeteer": "^4.4.4",
     "commander": "^9.4.1",
+    "csv-parse": "^5.3.2",
+    "inquirer": "^9.1.4",
     "loud-rejection": "^2.2.0",
     "ora": "^6.1.2",
     "read-pkg-up": "^9.1.0"

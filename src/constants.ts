@@ -1,25 +1,47 @@
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
+import { readPackageUpSync } from 'read-pkg-up';
+
+/**
+ * Package Info
+ */
+export const __dirname: string = dirname(fileURLToPath(import.meta.url));
+const manifest = readPackageUpSync({ cwd: __dirname });
+export const [PACKAGE_NAME, PACKAGE_DESC, VERSION] = manifest
+  ? [
+      manifest.packageJson.name,
+      manifest.packageJson.description,
+      manifest.packageJson.version,
+    ]
+  : ['unknown', 'unknown', 'unknown'];
+
 /**
  * Default configuration
  */
-export interface ConfigValue {
+export type ConfigValue = {
   axeCoreTags: string[];
   resultTypes: string[];
   filePath: string;
-  encoding: string;
+  // encoding: string;
   locale: string;
-}
-export const DEFAULT_CONFIG: ConfigValue = {
-  axeCoreTags: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'],
-  resultTypes: ['incomplete', 'violations'],
-  filePath: './urls.txt',
-  encoding: 'utf8',
-  locale: 'en',
 };
+export const DEFAULT_LOCALE = 'en';
+export const DEFAULT_CONFIG: ConfigValue = {
+  axeCoreTags: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'], // See https://www.deque.com/axe/core-documentation/api-documentation/#user-content-axe-core-tags for possible values
+  resultTypes: ['incomplete', 'violations'], // Possible values are 'inapplicable', 'passes', 'incomplete', and 'violations'
+  filePath: './urls.txt',
+  // encoding: 'utf8',
+  locale: `${DEFAULT_LOCALE}`,
+};
+export const CONFIG_FILE_PATH = 'axe-scan.config.json';
 
 /**
  * Header row of the `axe-scan run` output
  */
-export const REPORT_HEADER = [
+export type ReportRowValue = {
+  [key: string]: string;
+};
+export const REPORT_HEADER: string[] = [
   'URL',
   'Rule Type', // rule ID
   'Result Type', // inapplicable, incomplete, passes, or violations
@@ -30,5 +52,24 @@ export const REPORT_HEADER = [
   'DOM Element',
   'Help',
   'Help URL',
-  'WCAG criteria', // 1.4.3, 2.3.1, etc.
+  'WCAG Criteria', // WCAG success criteria
+  'axe-scan Version',
+];
+
+/**
+ * Header row of the `axe-scan summary` output
+ */
+export const SUMMARY_HEADER: string[] = [
+  'URL',
+  'WCAG Criteria', // 1.4.3, 2.3.1, etc.
+  'WCAG Level', // AAA, AA, or A
+  'Result',
+  'axe-scan Version',
+];
+
+export const RESULT_TYPES: string[] = [
+  'inapplicable',
+  'passes',
+  'incomplete',
+  'violations',
 ];
