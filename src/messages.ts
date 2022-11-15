@@ -1,6 +1,7 @@
 import axe from 'axe-core';
 import fs from 'fs';
 import { createRequire } from 'node:module';
+import path from 'path';
 
 import {
   // __dirname,
@@ -63,8 +64,7 @@ export function setAxeLocalization(locale: string): axe.Locale {
   const require: NodeRequire = createRequire(import.meta.url);
   const axeCoreLocalesPath: string = require
     .resolve('axe-core')
-    .replace('axe.js', 'locales/');
-  console.log(axeCoreLocalesPath); //////
+    .replace('axe.js', 'locales');
   // Get the list of available axe-core locales
   const localesList: string[] = fs
     .readdirSync(axeCoreLocalesPath)
@@ -79,7 +79,9 @@ export function setAxeLocalization(locale: string): axe.Locale {
   let axeLocale: axe.Locale;
   if (localesList.includes(locale)) {
     axeLocale = JSON.parse(
-      fs.readFileSync(`${axeCoreLocalesPath}${locale}.json`).toString()
+      fs
+        .readFileSync(path.join(axeCoreLocalesPath, `${locale}.json`))
+        .toString()
     );
     return axeLocale;
   } else {
