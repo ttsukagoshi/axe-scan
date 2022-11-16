@@ -1,6 +1,4 @@
-/////////////////
-// run command //
-/////////////////
+// run: Run the accessibility test
 
 import { AxePuppeteer } from '@axe-core/puppeteer';
 import axe from 'axe-core';
