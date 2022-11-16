@@ -1,16 +1,10 @@
-/////////////////////
-// summary command //
-/////////////////////
+// summary: Create a summarized accessibility report of the web pages grouped by the WCAG criteria.
 
 import { AxePuppeteer } from '@axe-core/puppeteer';
 import axe from 'axe-core';
 import { parse } from 'csv-parse/sync';
 import fs from 'fs';
 import puppeteer from 'puppeteer';
-// import AXE_LOCALE_JA from 'axe-core/locales/ja.json';
-const axeConfig = {
-  /*locale: AXE_LOCALE_JA*/
-};
 
 // import { AxeScanError } from '../axe-scan-error';
 import {
@@ -19,7 +13,7 @@ import {
   ReportRowValue,
   SUMMARY_HEADER,
 } from '../constants.js';
-import { MessageLocalization } from '../messages.js';
+import { MessageLocalization, setAxeLocalization } from '../messages.js';
 import { getConfig, spinner, PartialAxeResults } from '../utils.js';
 
 interface CommandOption {
@@ -49,6 +43,9 @@ enum SummaryResult {
 }
 const config: ConfigValue = getConfig();
 const localizedMessage = new MessageLocalization(config.locale);
+const axeConfig: axe.Spec = {
+  locale: setAxeLocalization(config.locale),
+};
 
 // RegExp to catch WCAG-related axe-core tags in https://www.deque.com/axe/core-documentation/api-documentation/#user-content-axe-core-tags
 const wcagRegExp = /^wcag(\d{3}|\d{1,2}[a]{1,3})$/;
