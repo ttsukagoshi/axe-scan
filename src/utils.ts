@@ -53,7 +53,7 @@ export function getConfig(
       JSON.parse(fs.readFileSync(CONFIG_FILE_PATH).toString())
     );
   } else if (
-    fs.existsSync(CONFIG_FILE_PATH_HOME) ||
+    fs.existsSync(CONFIG_FILE_PATH_HOME) &&
     startDir === StartDirValue.HOME
   ) {
     // Check for config file in the user's home directory
