@@ -40,6 +40,7 @@ enum WcagLevel {
 enum SummaryResult {
   PASS = 'PASS',
   VIOLATION = 'VIOLATION',
+  INAPPLICABLE = 'INAPPLICABLE',
 }
 const config: ConfigValue = getConfig();
 const localizedMessage = new MessageLocalization(config.locale);
@@ -54,7 +55,7 @@ const wcagRegExp = /^wcag(\d{3}|\d{1,2}[a]{1,3})$/;
  * Summarize and updates the axe result by their respective result types.
  * @param axeResult Axe result object
  * @param resultType Axe result types: violation, incomplete, passes, or inapplicable
- * @param resultSummary PASS or VIOLATION
+ * @param resultSummary PASS, VIOLATION, or INAPPLICABLE
  * @param summaryObj Object in which to save summary results.
  * @param outputByPage When true, the top-level key of summaryObj will be the respective page URLs.
  * @param whitelist Whitelisted alerts to be ommited from the output; a subset of the `axe-scan run` output.
@@ -217,11 +218,11 @@ export default async function (options: CommandOption): Promise<void> {
       .analyze();
 
     // Summarize results
-    // 'inapplicable' summarized as PASS
+    // 'inapplicable' summarized as INAPPLICABLE
     outputObj = summarizeAxeResult(
       results,
       'inapplicable',
-      SummaryResult.PASS,
+      SummaryResult.INAPPLICABLE,
       outputObj,
       outputByPage
     );
