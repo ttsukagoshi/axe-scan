@@ -41,6 +41,7 @@ program
 program
   .command('init')
   .description(`Create a ${CONFIG_FILE_PATH} in the current directory.`)
+  .option('-g, --global', 'Create the config file in the home directory.')
   .action(init);
 
 /*

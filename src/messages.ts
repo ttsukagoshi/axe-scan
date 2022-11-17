@@ -3,41 +3,65 @@ import fs from 'fs';
 import { createRequire } from 'node:module';
 import path from 'path';
 
-import {
-  // __dirname,
-  CONFIG_FILE_PATH,
-  DEFAULT_LOCALE,
-  PACKAGE_NAME,
-} from './constants.js';
+import { DEFAULT_LOCALE, PACKAGE_NAME } from './constants.js';
 
 interface I18nMessage {
-  [key: string]: LocalizedMessage;
+  [key: string]: LocalizedMessageTypes;
 }
-interface LocalizedMessage {
+interface LocalizedMessageTypes {
+  text: LocalizedMessageString;
+  func: LocalizedMessageFunc;
+}
+interface LocalizedMessageString {
   [key: string]: string;
 }
+interface LocalizedMessageFunc {
+  [key: string]: MessageFunction;
+}
+type MessageFunction = (placeholderText: string) => string;
+
 const MESSAGES: I18nMessage = {
+  // Messages that take required params are stored
+  // in the func object of the respective locales.
   en: {
-    INFO_INITIATION_COMPLETE_CREATED: `${CONFIG_FILE_PATH} has been created.`,
-    INFO_INITIATION_COMPLETE_UPDATED: `${CONFIG_FILE_PATH} has been updated.`,
-    INFO_RUNNING: 'Running accessibility scan...',
-    INFO_SUMMARY: 'Creating summarized report of the accessibility scan...',
-    PROMPT_CONFIG_FILE_ALREADY_EXISTS: `${CONFIG_FILE_PATH} already exists in the current directory. Do you want to overwrite? (y/N)`,
-    ERROR_INIT_ABORT: `No overwriting. Aborting ${PACKAGE_NAME} initiation process.`,
+    text: {
+      INFO_RUNNING: 'Running accessibility scan...',
+      INFO_SUMMARY: 'Creating summarized report of the accessibility scan...',
+      ERROR_INIT_ABORT: `No overwriting. Aborting ${PACKAGE_NAME} initiation process.`,
+      PROMPT_CONFIG_FILE_ALREADY_EXISTS:
+        'Configuration file already exists in the directory. Do you want to overwrite? (y/N)',
+    },
+    func: {
+      INFO_INITIATION_COMPLETE_CREATED: (
+        targetConfigFilePath: string
+      ): string => `${targetConfigFilePath} has been created.`,
+      INFO_INITIATION_COMPLETE_UPDATED: (
+        targetConfigFilePath: string
+      ): string => `${targetConfigFilePath} has been updated.`,
+    },
   },
   ja: {
-    INFO_INITIATION_COMPLETE_CREATED: `完了：設定ファイル ${CONFIG_FILE_PATH} 新規作成`,
-    INFO_INITIATION_COMPLETE_UPDATED: `完了：設定ファイル ${CONFIG_FILE_PATH} 更新`,
-    INFO_RUNNING: 'アクセシビリティ検査を実行中...',
-    INFO_SUMMARY: 'アクセシビリティ検査報告書を作成中...',
-    PROMPT_CONFIG_FILE_ALREADY_EXISTS: `${CONFIG_FILE_PATH} は現在のディレクトリ内にすでに存在します。上書きますか？ (y/N)`,
-    ERROR_INIT_ABORT: `中断：${PACKAGE_NAME} 初期化を中断しました。${CONFIG_FILE_PATH} は上書きされませんでした。`,
+    text: {
+      INFO_RUNNING: 'アクセシビリティ検査を実行中...',
+      INFO_SUMMARY: 'アクセシビリティ検査報告書を作成中...',
+      ERROR_INIT_ABORT: `中断：${PACKAGE_NAME} 初期化を中断しました。設定ファイルは上書きされませんでした。`,
+      PROMPT_CONFIG_FILE_ALREADY_EXISTS:
+        '設定ファイルはディレクトリ内にすでに存在します。上書きますか？ (y/N)',
+    },
+    func: {
+      INFO_INITIATION_COMPLETE_CREATED: (
+        targetConfigFilePath: string
+      ): string => `完了：設定ファイル ${targetConfigFilePath} 新規作成`,
+      INFO_INITIATION_COMPLETE_UPDATED: (
+        targetConfigFilePath: string
+      ): string => `完了：設定ファイル ${targetConfigFilePath} 更新`,
+    },
   },
 };
 
 export class MessageLocalization {
   locale: string;
-  message: LocalizedMessage;
+  message: LocalizedMessageTypes;
   constructor(locale: string) {
     if (locale.match(/^[A-Za-z]{2}(_[A-Za_z]{2})?$/)) {
       const availableLocales = Object.keys(MESSAGES);

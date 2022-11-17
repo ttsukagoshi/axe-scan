@@ -2,6 +2,7 @@ import axe from 'axe-core';
 import fs from 'fs';
 import ora from 'ora';
 import os from 'os';
+import path from 'path';
 
 import { DEFAULT_CONFIG, CONFIG_FILE_PATH, ConfigValue } from './constants.js';
 
@@ -13,11 +14,11 @@ export const spinner = ora(); // New spinner
 /**
  * Stops the spinner if it is spinning
  */
-export const stopSpinner = function (): void {
+export function stopSpinner(): void {
   if (spinner.isSpinning) {
     spinner.stop();
   }
-};
+}
 
 export interface PartialAxeResults {
   passes: axe.Result[];
@@ -30,6 +31,8 @@ export enum StartDirValue {
   CURRENT = 'current',
   HOME = 'home',
 }
+
+export const CONFIG_FILE_PATH_HOME = path.join(os.homedir(), CONFIG_FILE_PATH);
 
 /**
  * Get contents of the config file in the order of:
@@ -50,7 +53,7 @@ export function getConfig(
       JSON.parse(fs.readFileSync(CONFIG_FILE_PATH).toString())
     );
   } else if (
-    fs.existsSync(`${os.homedir()}/${CONFIG_FILE_PATH}`) &&
+    fs.existsSync(CONFIG_FILE_PATH_HOME) &&
     startDir === StartDirValue.HOME
   ) {
     // Check for config file in the user's home directory
