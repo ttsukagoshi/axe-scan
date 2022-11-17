@@ -172,7 +172,7 @@ function summarizeAxeResult(
  */
 export default async function (options: CommandOption): Promise<void> {
   // Start spinner
-  spinner.start(localizedMessage.message.INFO_SUMMARY);
+  spinner.start(localizedMessage.message.text.INFO_SUMMARY);
 
   const filePath: string = options?.file
     ? options.file

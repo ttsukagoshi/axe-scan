@@ -26,11 +26,6 @@ interface PartialAxeResults {
   incomplete: axe.Result[];
   inapplicable: axe.Result[];
 }
-const config: ConfigValue = getConfig();
-const localizedMessage = new MessageLocalization(config.locale);
-const axeConfig: axe.Spec = {
-  locale: setAxeLocalization(config.locale),
-};
 
 /**
  * Run the accessibility test and returns the results as a standard output.
@@ -38,8 +33,15 @@ const axeConfig: axe.Spec = {
  * @param {string} options.whitelist File path to the CSV file containing the list of whitelisted alerts to be ommited from the output.
  */
 export default async function (options: CommandOption): Promise<void> {
+  // Configurations
+  const config: ConfigValue = getConfig();
+  const localizedMessage = new MessageLocalization(config.locale);
+  const axeConfig: axe.Spec = {
+    locale: setAxeLocalization(config.locale),
+  };
+
   // Start spinner
-  spinner.start(localizedMessage.message.INFO_RUNNING);
+  spinner.start(localizedMessage.message.text.INFO_RUNNING);
 
   const filePath: string = options?.file ? options.file : config.filePath;
   const urls: string[] = fs

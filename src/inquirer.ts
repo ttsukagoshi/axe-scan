@@ -14,7 +14,7 @@ export function overwritePrompt(): Promise<{ overwrite: boolean }> {
   return prompt<{ overwrite: boolean }>([
     {
       default: false,
-      message: localizedMessage.message.PROMPT_CONFIG_FILE_ALREADY_EXISTS,
+      message: localizedMessage.message.text.PROMPT_CONFIG_FILE_ALREADY_EXISTS,
       name: 'overwrite',
       type: 'confirm',
     },
