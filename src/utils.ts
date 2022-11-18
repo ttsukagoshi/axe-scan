@@ -53,15 +53,19 @@ export function getConfig(
       JSON.parse(fs.readFileSync(CONFIG_FILE_PATH).toString())
     );
   } else if (
-    fs.existsSync(CONFIG_FILE_PATH_HOME) &&
+    fs.existsSync(CONFIG_FILE_PATH_HOME) ||
     startDir === StartDirValue.HOME
   ) {
     // Check for config file in the user's home directory
-    return extendConfig(
-      JSON.parse(
-        fs.readFileSync(`${os.homedir()}/${CONFIG_FILE_PATH}`).toString()
-      )
-    );
+    if (fs.existsSync(CONFIG_FILE_PATH_HOME)) {
+      return extendConfig(
+        JSON.parse(
+          fs.readFileSync(`${os.homedir()}/${CONFIG_FILE_PATH}`).toString()
+        )
+      );
+    } else {
+      return DEFAULT_CONFIG;
+    }
   } else {
     // if none of above, use the default configuration
     return DEFAULT_CONFIG;

@@ -18,16 +18,23 @@ interface LocalizedMessageString {
 interface LocalizedMessageFunc {
   [key: string]: MessageFunction;
 }
-type MessageFunction = (placeholderText: string) => string;
+type MessageFunction = (...placeholderTexts: string[]) => string;
 
 const MESSAGES: I18nMessage = {
   // Messages that take required params are stored
   // in the func object of the respective locales.
   en: {
     text: {
+      INFO_CURRENT_CONFIG:
+        'The current axe-scan configurations are as follows:\n\n',
+      INFO_CURRENT_CONFIG_SUFFIX:
+        '\nUse the "--change-value" option to modify a particular item, or directly edit the config file.',
+      INFO_CONFIG_UPDATED: 'Updated axe-scan configuration.',
       INFO_RUNNING: 'Running accessibility scan...',
       INFO_SUMMARY: 'Creating summarized report of the accessibility scan...',
       ERROR_INIT_ABORT: `No overwriting. Aborting ${PACKAGE_NAME} initiation process.`,
+      ERROR_KEY_VALUE_NOT_SET:
+        '<key>=<value> must be set when using the --change-value option.\ne.g. axe-scan config --change-value locale=ja\ne.g. axe-scan config -V resultTypes=violation,incomplete,inapplicable',
       PROMPT_CONFIG_FILE_ALREADY_EXISTS:
         'Configuration file already exists in the directory. Do you want to overwrite? (y/N)',
     },
@@ -38,13 +45,26 @@ const MESSAGES: I18nMessage = {
       INFO_INITIATION_COMPLETE_UPDATED: (
         targetConfigFilePath: string
       ): string => `${targetConfigFilePath} has been updated.`,
+      ERROR_CONFIG_FILE_NOT_FOUND: (
+        targetConfigFilePath: string,
+        globalFlag: string
+      ): string =>
+        `${targetConfigFilePath} does not exist. Try running "axe-scan init${globalFlag}" first.`,
+      ERROR_INVALID_CONFIG_KEY: (key: string) =>
+        `${key} is not a valid axe-scan configuration item.`,
     },
   },
   ja: {
     text: {
+      INFO_CURRENT_CONFIG: '現在のaxe-scan設定は次のとおりです:\n\n',
+      INFO_CURRENT_CONFIG_SUFFIX:
+        '\n設定を変更する場合はオプション --change-value を使うか、直接設定ファイルを編集してください。',
+      INFO_CONFIG_UPDATED: 'axe-scanの設定が更新されました。',
       INFO_RUNNING: 'アクセシビリティ検査を実行中...',
       INFO_SUMMARY: 'アクセシビリティ検査報告書を作成中...',
       ERROR_INIT_ABORT: `中断：${PACKAGE_NAME} 初期化を中断しました。設定ファイルは上書きされませんでした。`,
+      ERROR_KEY_VALUE_NOT_SET:
+        'オプション --change-value を使用するときは、併せて <key>=<value> を指定する必要があります。\n例) axe-scan config --change-value locale=ja\n例) axe-scan config -V resultTypes=violation,incomplete,inapplicable',
       PROMPT_CONFIG_FILE_ALREADY_EXISTS:
         '設定ファイルはディレクトリ内にすでに存在します。上書きますか？ (y/N)',
     },
@@ -55,6 +75,13 @@ const MESSAGES: I18nMessage = {
       INFO_INITIATION_COMPLETE_UPDATED: (
         targetConfigFilePath: string
       ): string => `完了：設定ファイル ${targetConfigFilePath} 更新`,
+      ERROR_CONFIG_FILE_NOT_FOUND: (
+        targetConfigFilePath: string,
+        globalFlag: string
+      ): string =>
+        `${targetConfigFilePath} が存在しません。先に "axe-scan init${globalFlag}" を実行してください。`,
+      ERROR_INVALID_CONFIG_KEY: (key: string) =>
+        `${key} はaxe-scanの設定項目ではありません。`,
     },
   },
 };
@@ -76,10 +103,16 @@ export class MessageLocalization {
     } else {
       this.locale = DEFAULT_LOCALE;
     }
-    this.message = Object.assign(
-      MESSAGES[DEFAULT_LOCALE],
-      MESSAGES[this.locale]
-    );
+    this.message = {
+      text: Object.assign(
+        MESSAGES[DEFAULT_LOCALE].text,
+        MESSAGES[this.locale].text
+      ),
+      func: Object.assign(
+        MESSAGES[DEFAULT_LOCALE].func,
+        MESSAGES[this.locale].func
+      ),
+    };
   }
 }
 
