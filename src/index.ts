@@ -69,7 +69,7 @@ program
   .description('Run the accessibility test.')
   .option(
     '-F, --file <urlsFilePath>',
-    'Designate the file path for the list of URLs on which to conduct the accessiblity test.'
+    'Designate the file path for the list of URLs on which to conduct the accessibility test.'
   )
   .option(
     '-W, --whitelist <whitelistFilePath>',
