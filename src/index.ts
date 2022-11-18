@@ -13,6 +13,7 @@ import {
 } from './constants.js';
 import { spinner, stopSpinner } from './utils.js';
 // Subcommands
+import config from './commands/config.js';
 import init from './commands/init.js';
 import run from './commands/run.js';
 import summary from './commands/summary.js';
@@ -44,11 +45,20 @@ program
   .option('-g, --global', 'Create the config file in the home directory.')
   .action(init);
 
-/*
 program
   .command('config')
-  .description('Modify an item in the configuration file');
-*/
+  .description(
+    'Check the valid axe-scan settings. Optionally modify an item in the configuration file.'
+  )
+  .option(
+    '-V, --change-value <key=value>',
+    'Modify the value of the designated key item in the configuration file. To assign multiple values to a key, connect the values with a comma. e.g. axe-scan config -V resultTypes=incomplete,violations,passes'
+  )
+  .option(
+    '-g, --global',
+    'Edit the config file in the home directory instead of the current directory. Use with the --change-value option.'
+  )
+  .action(config);
 
 /**
  * Run the accessibility test and returns the results as a standard output.
