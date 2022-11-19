@@ -36,8 +36,8 @@ export const DEFAULT_CONFIG: ConfigValue = {
 export const RESULT_TYPES_FULL_SET = [
   // Full set of the values that resultTypes in ConfigValue can take
   'violations',
-  'passes',
   'incomplete',
+  'inapplicable',
   'passes',
 ];
 export const CONFIG_FILE_PATH = 'axe-scan.config.json';
