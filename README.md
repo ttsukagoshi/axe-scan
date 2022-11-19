@@ -4,21 +4,21 @@
 
 A CLI tool to test web accessibility on multiple web pages based on a list of URLs in a text file. Run on Node.js and uses [axe-core](https://github.com/dequelabs/axe-core) and [Puppeteer](https://github.com/puppeteer/puppeteer) as its testing and browsing engines.
 
-> ## Table of Contents
->
-> - [Philosophy and Features](#philosophy-and-features)
-> - [Installation](#installation)
->   - [Prerequisite: Node.js](#prerequisite-nodejs)
->   - [Install axe-scan](#install-axe-scan)
->   - [Update Package](#update-package)
-> - [Usage](#usage)
->   - [Initiate](#initiate)
->   - [Configure](#configure)
->   - [Run the scan](#run-the-scan)
->   - [Create a summarized report](#create-a-summarized-report)
->   - [Define whitelist](#define-whitelist)
-> - [Configuring axe-scan](#configuring-axe-scan)
-> - [Acknowledgements](#acknowledgements)
+## Table of Contents
+
+- [Philosophy and Features](#philosophy-and-features)
+- [Installation](#installation)
+  - [Prerequisite: Node.js](#prerequisite-nodejs)
+  - [Install axe-scan](#install-axe-scan)
+  - [Update Package](#update-package)
+- [Usage](#usage)
+  - [Initiate](#initiate)
+  - [Configure](#configure)
+  - [Run the scan](#run-the-scan)
+  - [Create a summarized report](#create-a-summarized-report)
+  - [Define whitelist](#define-whitelist)
+- [Configuring axe-scan](#configuring-axe-scan)
+- [Acknowledgements](#acknowledgements)
 
 ## Philosophy and Features
 
