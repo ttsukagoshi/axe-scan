@@ -4,21 +4,22 @@
 
 A CLI tool to test web accessibility on multiple web pages based on a list of URLs in a text file. Run on Node.js and uses [axe-core](https://github.com/dequelabs/axe-core) and [Puppeteer](https://github.com/puppeteer/puppeteer) as its testing and browsing engines.
 
-> ## Table of Contents
->
-> - [Philosophy and Features](#philosophy-and-features)
-> - [Installation](#installation)
->   - [Prerequisite: Node.js](#prerequisite-nodejs)
->   - [Install axe-scan](#install-axe-scan)
->   - [Update Package](#update-package)
-> - [Usage](#usage)
->   - [Initiate](#initiate)
->   - [Configure](#configure)
->   - [Run the scan](#run-the-scan)
->   - [Create a summarized report](#create-a-summarized-report)
->   - [Define whitelist](#define-whitelist)
-> - [Configuring axe-scan](#configuring-axe-scan)
-> - [Acknowledgements](#acknowledgements)
+## Table of Contents
+
+- [Philosophy and Features](#philosophy-and-features)
+- [Installation](#installation)
+  - [Prerequisite: Node.js](#prerequisite-nodejs)
+  - [Install axe-scan](#install-axe-scan)
+  - [Update Package](#update-package)
+- [Usage](#usage)
+  - [Initiate](#initiate)
+  - [Configure](#configure)
+  - [Run the scan](#run-the-scan)
+  - [Create a summarized report](#create-a-summarized-report)
+  - [Define whitelist](#define-whitelist)
+- [Configuring axe-scan](#configuring-axe-scan)
+- [Testing on websites with basic authentication](#testing-on-websites-with-basic-authentication)
+- [Acknowledgements](#acknowledgements)
 
 ## Philosophy and Features
 
@@ -157,6 +158,8 @@ https://www.website-to-test.com/subpage/
 https://www.website-to-test.com/another-subpage/
 ```
 
+You may want to see also the [Testing on websites with basic authentication](#testing-on-websites-with-basic-authentication) section.
+
 axe-scan outputs the list of page-by-page, element-by-element test results, where the result type is `violation` or `incomplete`. See [the axe-core documentation](https://www.deque.com/axe/core-documentation/api-documentation/#results-object) for their definitions. Which result type to output in the report can be changed by the editing the configuration file `axe-scan.config.json`:
 
 ```jsonc
@@ -190,7 +193,15 @@ For details of whitelisting, see the [Define whitelist section](#define-whitelis
 axe-scan summary [options]
 ```
 
-Create a summarized accessibility report of the web pages grouped by the WCAG success criteria. If the option `--pages` is set, the report will be generated per page.
+Create a summarized accessibility report of the web pages grouped by the WCAG success criteria. If the option `--page` is set, the report will be generated per page.
+
+You may want to see also the [Testing on websites with basic authentication](#testing-on-websites-with-basic-authentication) section.
+
+#### Options
+
+- `-F`, `--file <urlsFilePath>`: Designate the file path for the list of URLs on which to conduct the accessibility test.
+- `-P`, `--page`: Create the summary report on per page basis.
+- `-W`, `--whitelist <whitelistFilePath>`: Designate the file path for the list of whitelisted accessibility alerts.
 
 ### Define whitelist
 
@@ -219,6 +230,30 @@ axe-scan summary -W whitelist.csv > summary.csv
 | `resultTypes` | The results types of axe that should be output on `axe-scan run` command. The original axe results are grouped according to their outcome into the following arrays groups: `passes` (These results indicate what elements passed the rules), `violations` (These results indicate what elements failed the rules), `inapplicable` (These results indicate which rules did not run because no matching content was found on the page. For example, with no video, those rules won't run.), and `incomplete` (These results were aborted and require further testing. This can happen either because of technical restrictions to what the rule can test, or because a javascript error occurred.). See the [official documentation on axe-core options](https://www.deque.com/axe/core-documentation/api-documentation/#options-parameter) for more detail. | `["incomplete", "violations"]`                 |
 | `filePath`    | File path to the list of URLs to test accessibility on. For example, if you want axe-scan to refer to the `target-urls.txt` in a subdirectory named `data` in your macOS, you would set this value to `./data/target-urls.txt`.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             | `./urls.txt`                                   |
 | `locale`      | The language of the axe output and messages of axe-scan. See [dequelabs/axe-core](https://github.com/dequelabs/axe-core#supported-locales) for the comprehensive list of supported locales in axe. Except for `en` (English; the default value), the language code should match the JSON file names available in the [locales folder of axe-core](https://github.com/dequelabs/axe-core/tree/develop/locales), e.g. `de` (Germany) from `de.json`. Note that messages of axe-scan are separately maintained in [`./src/messages.ts` of this repository](https://github.com/ttsukagoshi/axe-scan/blob/main/src/messages.ts)                                                                                                                                                                                                                                  | `en`                                           |
+
+## Testing on websites with basic authentication
+
+When testing on websites with basic authentication, include the auth info in the list of URLs in the following format:
+
+```
+https://userid:password@example.com/
+```
+
+For example, if you are testing on the following pages:
+
+```
+https://mywebsite.com/
+https://mywebsite.com/subpage1/
+https://mywebsite.com/subpage2/
+```
+
+with basic authentication of ID: `myAccountId` and password: `qwerty`, your `urls.txt` should look like this:
+
+```
+https://myAccountId:qwerty@mywebsite.com/
+https://myAccountId:qwerty@mywebsite.com/subpage1/
+https://myAccountId:qwerty@mywebsite.com/subpage2/
+```
 
 ## Acknowledgements
 
