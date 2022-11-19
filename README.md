@@ -6,6 +6,7 @@ A CLI tool to test web accessibility on multiple web pages based on a list of UR
 
 > ## Table of Contents
 >
+> - [Philosophy and Features](#philosophy-and-features)
 > - [Installation](#installation)
 >   - [Prerequisite: Node.js](#prerequisite-nodejs)
 >   - [Install axe-scan](#install-axe-scan)
@@ -18,6 +19,28 @@ A CLI tool to test web accessibility on multiple web pages based on a list of UR
 >   - [Define whitelist](#define-whitelist)
 > - [Configuring axe-scan](#configuring-axe-scan)
 > - [Acknowledgements](#acknowledgements)
+
+## Philosophy and Features
+
+Making a website accessible is not just about social equity and legal compliance; accessibility is a fundamental aspect in developing and maintaining a user-oriented website. Improved user experience is likely to be favored by search engines like Google, which should be a heads-up for the management-level members of the organization who are less interested in this topic.
+
+Web accessibility is often brought up in the context of the responsibilities of designers and developers, and indeed, the [Web Content Accessibility Guidelines (WCAG)](https://www.w3.org/WAI/standards-guidelines/wcag/) states itself that it is intended for:
+
+> - Web content developers (page authors, site designers, etc.)
+> - Web authoring tool developers
+> - Web accessibility evaluation tool developers
+> - Others who want or need a standard for web accessibility, including for mobile accessibility
+>
+> (_Who WCAG is for_ from [WCAG 2.0 Overview](https://www.w3.org/WAI/standards-guidelines/wcag/))
+
+Looking a little deeper into the actual contents of the WCAG, however, you will see that EVERY member of those related to developing and maintaining a website, not just the developers and engineers, need to be aware of the requirements to achieve a certain level of accessibility and keep that level. axe-scan aims to provide a common ground of discussion to improve the website's accessibility between tech professionals and other members who are less familiar with WCAG through the following features:
+
+- **Uses axe-core.** The open-sourced accessibility testing engine [axe-core](https://github.com/dequelabs/axe-core) provided by Deque Systems, Inc. is one of the leading testing engines of the world. Tools using this engine to assist every step of web development are abundant and mostly free of charge. Such testing results will be consistent with axe-scan as long as they use axe-core. This can be time-saving for both the developer and the client; developers can stop worrying about having to make last-minute changes in web design.
+- **Test multiple web pages at once.** There are plenty of browser extensions and other accessibility testing tools in the world, but (surprisingly) not many can test multiple pages at once. In axe-scan, you have only to prepare a text file with the list of URLs to conduct the test on.
+- **Ouput results as CSV.** Testing results can be easily saved as a CSV file, which in turn can be shared with your team using a spreadsheet application to discuss the items requiring action.
+- **Whitelist the subset of results for repetitive testing.** Some results of axe-core are labeled `incomplete`, which refers to HTML elements that axe-core could not mechanically determine as `passes` or `violations` of the rules. These `incomplete` results may include elements that do not need further action. To avoid such elements from repetitively appearing in the results, axe-scan provides an option to whitelist the elements.
+- **Localization available in axe-core are reflected in the output.** axe-core comes with the community-maintained set of localizations ([Supported Locales | axe-core](https://github.com/dequelabs/axe-core#supported-locales)). You can easily change the language of the axe-scan results to any of the localizations supported in axe-core.
+- **Create summarized report based on WCAG Success Criteria.** While axe-core provides references to the WCAG Success Criteria (SC) in its output, the test itself is conducted based on axe-core's original set of rules. To see how the the set of web pages have passed each of the WCAG SC supported by axe-core, axe-scan can provide you with a summarized report grouped by the SC.
 
 ## Installation
 
@@ -104,6 +127,8 @@ See [Configuring axe-scan](#configuring-axe-scan) section for more detail. User 
 ```
 axe-scan config [options]
 ```
+
+> This section handles the usage of the `config` command. See [Configuring axe-scan](#configuring-axe-scan) section for more details on the respective configuration items.
 
 Check the valid axe-scan settings. When used with the `--change-value` option, it will modify the axe-scan setting to the local `./axe-scan.config.json` file. Returns an error if local `axe-scan.config.json` does not exist and encourages the user to run `axe-scan init` first. <!--Returns another error if the designated key/value does not match the predefined key/value sets.-->
 
