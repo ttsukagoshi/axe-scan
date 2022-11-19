@@ -28,11 +28,18 @@ export type ConfigValue = {
 export const DEFAULT_LOCALE = 'en';
 export const DEFAULT_CONFIG: ConfigValue = {
   axeCoreTags: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'], // See https://www.deque.com/axe/core-documentation/api-documentation/#user-content-axe-core-tags for possible values
-  resultTypes: ['incomplete', 'violations'], // Possible values are 'inapplicable', 'passes', 'incomplete', and 'violations'
+  resultTypes: ['incomplete', 'violations'], // Possible values are elements of RESULT_TYPES_FULL_SET
   filePath: './urls.txt',
   // encoding: 'utf8',
   locale: `${DEFAULT_LOCALE}`,
 };
+export const RESULT_TYPES_FULL_SET = [
+  // Full set of the values that resultTypes in ConfigValue can take
+  'violations',
+  'incomplete',
+  'inapplicable',
+  'passes',
+];
 export const CONFIG_FILE_PATH = 'axe-scan.config.json';
 
 /**

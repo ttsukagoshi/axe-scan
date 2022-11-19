@@ -72,18 +72,21 @@ function parseKeyValue(keyValue: string | undefined): Partial<ConfigValue> {
   if (['axeCoreTags', 'resultTypes'].includes(key)) {
     const valueArr: string[] = value.split(',');
     if (key === 'axeCoreTags') {
-      // Future issue: validate valueArr /////
       keyValueObj.axeCoreTags = valueArr;
     } else if (key === 'resultTypes') {
-      // Future issue: validate valueArr /////
+      valueArr.forEach((value) => {
+        if (!['violation', 'passes', 'incomplete', 'passes'].includes(value)) {
+          throw new AxeScanError(
+            localizedMessage.message.text.ERROR_INVALID_VALUE_FOR_RESULTTYPES
+          );
+        }
+      });
       keyValueObj.resultTypes = valueArr;
     }
   } else if (['filePath', 'locale'].includes(key)) {
     if (key === 'filePath') {
-      // Future issue: validate value /////
       keyValueObj.filePath = value;
     } else if (key === 'locale') {
-      // Future issue: validate value /////
       keyValueObj.locale = value;
     }
   } else {
