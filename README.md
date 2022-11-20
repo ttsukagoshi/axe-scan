@@ -6,7 +6,7 @@ A CLI tool to test web accessibility on multiple web pages based on a list of UR
 
 ## Table of Contents
 
-- [Philosophy and Features](#philosophy-and-features)
+- [The basic idea](#the-basic-idea)
 - [Installation](#installation)
   - [Prerequisite: Node.js](#prerequisite-nodejs)
   - [Install axe-scan](#install-axe-scan)
@@ -18,10 +18,18 @@ A CLI tool to test web accessibility on multiple web pages based on a list of UR
   - [Create a summarized report](#create-a-summarized-report)
   - [Define whitelist](#define-whitelist)
 - [Configuring axe-scan](#configuring-axe-scan)
+  - [`axeCoreTags`](#axecoretags)
+    - [`Default value`](#default-value)
+  - [`resultTypes`](#resulttypes)
+    - [`Default value`](#default-value-1)
+  - [`filePath`](#filepath)
+    - [`Default value`](#default-value-2)
+  - [`locale`](#locale)
+    - [`Default value`](#default-value-3)
 - [Testing on websites with basic authentication](#testing-on-websites-with-basic-authentication)
 - [Acknowledgments](#acknowledgments)
 
-## Philosophy and Features
+## The basic idea
 
 Making a website accessible is not just about social equity and legal compliance; accessibility is fundamental to developing and maintaining a user-oriented website. Improved user experience is likely to be favored by search engines like Google, which should be a heads-up for the management-level members of the organization who are less interested in this topic.
 
