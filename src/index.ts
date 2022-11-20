@@ -62,7 +62,7 @@ program
 
 /**
  * Run the accessibility test and returns the results as a standard output.
- * @example run --file path/to/urls-list.txt --whitelist ./whitelisted-alerts.csv
+ * @example run --file path/to/urls-list.txt --allowlist allowlist.csv
  */
 program
   .command('run')
@@ -72,9 +72,13 @@ program
     'Designate the file path for the list of URLs on which to conduct the accessibility test.'
   )
   .option(
-    '-W, --whitelist <whitelistFilePath>',
-    'Designate the file path for the list of whitelisted accessibility alerts.'
+    '-A, --allowlist <allowlistFilePath>',
+    'Designate the file path for the allowlist of accessibility alerts.'
   )
+  .option(
+    '-W, --whitelist <allowlistFilePath>',
+    'Alias of --allowlist. Scheduled to be deprecated on v2.0. Consider using --allowlist option instead.'
+  ) // Scheduled to be deprecated on v2.0
   .action(run);
 
 program
@@ -88,9 +92,13 @@ program
   )
   .option('-P, --page', 'Create the summary report on per page basis.')
   .option(
-    '-W, --whitelist <whitelistFilePath>',
-    'Designate the file path for the list of whitelisted accessibility alerts.'
+    '-A, --allowlist <allowlistFilePath>',
+    'Designate the file path for the allowlist of accessibility alerts.'
   )
+  .option(
+    '-W, --whitelist <allowlistFilePath>',
+    'Alias of --allowlist. Scheduled to be deprecated on v2.0. Consider using --allowlist option instead.'
+  ) // Scheduled to be deprecated on v2.0
   .action(summary);
 
 (async () => {

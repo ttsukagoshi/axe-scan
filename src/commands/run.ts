@@ -18,7 +18,8 @@ import { getConfig, spinner } from '../utils.js';
 
 interface CommandOption {
   readonly file?: string;
-  readonly whitelist?: string;
+  readonly allowlist?: string;
+  readonly whitelist?: string; // Scheduled to be deprecated on v2.0
 }
 interface PartialAxeResults {
   passes: axe.Result[];
@@ -30,7 +31,8 @@ interface PartialAxeResults {
 /**
  * Run the accessibility test and returns the results as a standard output.
  * @param {string} options.file File path to the text file containing the list of URLs.
- * @param {string} options.whitelist File path to the CSV file containing the list of whitelisted alerts to be ommited from the output.
+ * @param {string} options.allowlist File path to the CSV file containing the allowlisted alerts to be ommited from the output.
+ * @param {string} options.whitelist Alias of options.allowlist. Scheduled to be deprecated on v2.0
  */
 export default async function (options: CommandOption): Promise<void> {
   // Configurations
@@ -50,11 +52,21 @@ export default async function (options: CommandOption): Promise<void> {
     .replace(/\r?\n/g, ',')
     .split(',');
 
-  // Optional whitelisted items
-  const whitelist: ReportRowValue[] | undefined = options?.whitelist
-    ? parse(fs.readFileSync(options.whitelist), { columns: true })
+  // Optional allowlisted items
+  /* Use this script after --whitelist option is deprecated in >= v2.0
+  const allowlist: ReportRowValue[] | undefined = options?.allowlist
+    ? parse(fs.readFileSync(options.allowlist), { columns: true })
     : undefined;
-
+  */
+  let allowlist: ReportRowValue[] | undefined = undefined;
+  if (options?.allowlist || options?.whitelist) {
+    // options.whitelist is scheduled to be deprecated on v2.0
+    if (options.allowlist) {
+      allowlist = parse(fs.readFileSync(options.allowlist), { columns: true });
+    } else if (options.whitelist) {
+      allowlist = parse(fs.readFileSync(options.whitelist), { columns: true });
+    }
+  }
   const browser: puppeteer.Browser = await puppeteer.launch();
 
   let outputText: string = REPORT_HEADER.join();
@@ -104,8 +116,8 @@ export default async function (options: CommandOption): Promise<void> {
                 }, [])
                 .join(' ');
               if (
-                whitelist &&
-                whitelist.some(
+                allowlist &&
+                allowlist.some(
                   (row: ReportRowValue) =>
                     row.URL == results.url &&
                     row['Rule Type'] == resultItem.id &&
