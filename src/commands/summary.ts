@@ -19,7 +19,8 @@ import { getConfig, spinner, PartialAxeResults } from '../utils.js';
 interface CommandOption {
   readonly file?: string;
   readonly page?: boolean;
-  readonly whitelist?: string;
+  readonly allowlist?: string;
+  readonly whitelist?: string; // Scheduled to be deprecated on v2.0
 }
 interface AllPagesReportSummary {
   [key: string]: ReportSummary;
@@ -58,7 +59,7 @@ const wcagRegExp = /^wcag(\d{3}|\d{1,2}[a]{1,3})$/;
  * @param resultSummary PASS, VIOLATION, or INAPPLICABLE
  * @param summaryObj Object in which to save summary results.
  * @param outputByPage When true, the top-level key of summaryObj will be the respective page URLs.
- * @param whitelist Whitelisted alerts to be ommited from the output; a subset of the `axe-scan run` output.
+ * @param allowlist Allowlisted alerts to be ommited from the output; a subset of the `axe-scan run` output.
  * @returns The updated summaryObj
  */
 function summarizeAxeResult(
@@ -67,17 +68,17 @@ function summarizeAxeResult(
   resultSummary: SummaryResult,
   summaryObj: AllPagesReportSummary,
   outputByPage: boolean,
-  whitelist: ReportRowValue[] | undefined = undefined
+  allowlist: ReportRowValue[] | undefined = undefined
 ) {
   axeResult[resultType as keyof PartialAxeResults].forEach(
     (element: axe.Result) => {
       let summary: SummaryResult = resultSummary;
-      if (whitelist) {
+      if (allowlist) {
         if (
-          // If all of the nodes in this element is listed on the whitelist,
+          // If all of the nodes in this element is listed on the allowlist,
           // this element will be regarded as "PASS"
           element.nodes.every((node: axe.NodeResult) =>
-            whitelist.some(
+            allowlist.some(
               (row: ReportRowValue) =>
                 row.URL == axeResult.url &&
                 row['Rule Type'] == element.id &&
@@ -169,7 +170,8 @@ function summarizeAxeResult(
  * Create a summarized accessibility report of the web pages grouped by the WCAG criteria.
  * @param {string} options.file File path to the text file containing the list of URLs.
  * @param {boolean} options.page When set, the report will be generated per page.
- * @param {string} options.whitelist File path to the CSV file containing the list of whitelisted alerts to be ommited from the output.
+ * @param {string} options.allowlist File path to the CSV file containing the allowlisted alerts to be ommited from the output.
+ * @param {string} options.whitelist Alias of options.allowlist. Scheduled to be deprecated on v2.0
  */
 export default async function (options: CommandOption): Promise<void> {
   // Start spinner
@@ -186,10 +188,21 @@ export default async function (options: CommandOption): Promise<void> {
     .replace(/\r?\n/g, ',')
     .split(',');
 
-  // Optional whitelisted items
-  const whitelist: ReportRowValue[] | undefined = options?.whitelist
-    ? parse(fs.readFileSync(options.whitelist), { columns: true })
+  // Optional allowlisted items
+  /* Use this script after --whitelist option is deprecated in >= v2.0
+  const allowlist: ReportRowValue[] | undefined = options?.allowlist
+    ? parse(fs.readFileSync(options.allowlist), { columns: true })
     : undefined;
+  */
+  let allowlist: ReportRowValue[] | undefined = undefined;
+  if (options?.allowlist || options?.whitelist) {
+    // options.whitelist is scheduled to be deprecated on v2.0
+    if (options.allowlist) {
+      allowlist = parse(fs.readFileSync(options.allowlist), { columns: true });
+    } else if (options.whitelist) {
+      allowlist = parse(fs.readFileSync(options.whitelist), { columns: true });
+    }
+  }
 
   // Optional page flag
   const outputByPage: boolean = options?.page ? true : false;
@@ -241,7 +254,7 @@ export default async function (options: CommandOption): Promise<void> {
       SummaryResult.VIOLATION,
       outputObj,
       outputByPage,
-      whitelist
+      allowlist
     );
     // 'violations' summarized as VIOLATION
     outputObj = summarizeAxeResult(
@@ -250,7 +263,7 @@ export default async function (options: CommandOption): Promise<void> {
       SummaryResult.VIOLATION,
       outputObj,
       outputByPage,
-      whitelist
+      allowlist
     );
     await page.close();
   }
