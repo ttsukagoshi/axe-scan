@@ -4,9 +4,21 @@
 
 A CLI tool to test web accessibility on multiple web pages based on a list of URLs in a text file. Run on Node.js and uses [axe-core](https://github.com/dequelabs/axe-core) and [Puppeteer](https://github.com/puppeteer/puppeteer) as testing and browsing engines.
 
+---
+
 ## Table of Contents
 
 - [The basic idea](#the-basic-idea)
+- [Testing web accessibility: the basic flow](#testing-web-accessibility-the-basic-flow)
+  - [1. Install axe-scan](#1-install-axe-scan)
+  - [2. Setup axe-scan and set locale](#2-setup-axe-scan-and-set-locale)
+  - [3. Create `urls.txt`](#3-create-urlstxt)
+  - [4. Initial accessibility test](#4-initial-accessibility-test)
+  - [5. Review the results, resolve issues, and create an allowlist](#5-review-the-results-resolve-issues-and-create-an-allowlist)
+  - [6. Accessibility testing: second run](#6-accessibility-testing-second-run)
+  - [7. Create a summary report](#7-create-a-summary-report)
+  - [8. Share the files with your team](#8-share-the-files-with-your-team)
+  - [9. Use with manual checks](#9-use-with-manual-checks)
 - [Installation](#installation)
   - [Prerequisite: Node.js](#prerequisite-nodejs)
   - [Install axe-scan](#install-axe-scan)
@@ -19,15 +31,13 @@ A CLI tool to test web accessibility on multiple web pages based on a list of UR
   - [Define allowlist](#define-allowlist)
 - [Configuring axe-scan](#configuring-axe-scan)
   - [`axeCoreTags`](#axecoretags)
-    - [Default value](#default-value)
   - [`resultTypes`](#resulttypes)
-    - [Default value](#default-value-1)
   - [`filePath`](#filepath)
-    - [Default value](#default-value-2)
   - [`locale`](#locale)
-    - [Default value](#default-value-3)
 - [Testing on websites with basic authentication](#testing-on-websites-with-basic-authentication)
 - [Acknowledgments](#acknowledgments)
+
+---
 
 ## The basic idea
 
@@ -47,9 +57,89 @@ Looking a little deeper into the actual contents of the WCAG, however, you will 
 - **Uses axe-core.** The open-sourced accessibility testing engine [axe-core](https://github.com/dequelabs/axe-core) provided by Deque Systems, Inc. is one of the leading testing engines in the world. Tools using this engine to assist every step of web development are abundant and mostly free of charge. Such testing results will be consistent with axe-scan as long as they use axe-core. This common use of axe-core can be time-saving for both the developer and the client; developers can stop worrying about making last-minute changes in web design.
 - **Test multiple web pages at once.** There are plenty of browser extensions and other accessibility testing tools in the world, but (surprisingly) not many can test multiple pages at once. In axe-scan, you only have to prepare a text file with the list of URLs to conduct the test.
 - **Output results as CSV.** Testing results can be easily saved as a CSV file and shared with your team using a spreadsheet application to discuss the items requiring action.
-- **Allowlist for repetitive testing.** Some results of axe-core are labeled `incomplete`, which refers to HTML elements that axe-core could not mechanically determine as `passes` or `violations` of the rules. These `incomplete` results may include elements that do not need further action. To avoid such elements from repetitively appearing in the results, the axe-scan provides an option to define the list of the elements as an allowlist, .
+- **Allowlist for repetitive testing.** Some results of axe-core are labeled `incomplete`, which refers to HTML elements that axe-core could not mechanically determine as `passes` or `violations` of the rules. These `incomplete` results may include elements that do not need further action. To avoid such elements from repetitively appearing in the results, the axe-scan provides an option to define the list of the elements as an allowlist.
 - **Localizations available in axe-core are reflected in the output.** axe-core comes with the community-maintained set of localizations ([Supported Locales | axe-core](https://github.com/dequelabs/axe-core#supported-locales)). You can easily change the language of the axe-scan results to any of the localizations supported in axe-core.
 - **Create summarized report based on WCAG Success Criteria.** While axe-core references the WCAG Success Criteria (SC) in its output, the test itself is conducted based on axe-core's original set of rules. To see how the set of web pages have passed each of the WCAG SC supported by axe-core, axe-scan can provide you with a summarized report grouped by the SC.
+
+## Testing web accessibility: the basic flow
+
+This section lays out the basic outlines of testing web accessibility using axe-scan. See the later sections for details.
+
+### 1. Install axe-scan
+
+See the [Installation](#installation) section.
+
+### 2. Setup axe-scan and set locale
+
+Setup axe-scan in your working directory:
+
+```
+axe-scan init
+```
+
+If you want to change the language of the axe-scan output:
+
+```
+axe-scan config --change-value locale=ja
+```
+
+The above example sets the locale to `ja` or Japanese. See the [`locale` in Configuring axe-scan](#locale) section for more details on the values that it can take.
+
+### 3. Create `urls.txt`
+
+In your current working directory, create a list of the URLs on which to conduct the accessibility test. The URLs should be separated by line breaks. Name the file `urls.txt`. See [Run the scan](#run-the-scan) section for more detail.
+
+### 4. Initial accessibility test
+
+Conduct the initial test and save the results to `results.csv`:
+
+```
+axe-scan run > results.csv
+```
+
+A list of around 1,000 pages will take approx. 1 hour to complete.
+
+### 5. Review the results, resolve issues, and create an allowlist
+
+Open the `results.csv` and check the contents. You will likely see that under the `Result Types` column, there are `violations` and `incomplete` items.
+
+`Violations` are elements that clearly violate one or more of the WCAG Success Criteria. Address these issues. Note that there may be multiple rows for a single issue if it has more than one way to resolve it. Once handled properly using one of the methods, the set of items will all disappear.
+
+`Incomplete` are elements that axe-core could not clearly determine whether it is a violation or not. Check the item manually and determine if it is a violation or not. If no problems were found, flag the row to include it in the allowlist for future use.
+
+Create an `allowlist.csv` by filtering the `results.csv` for items that you marked so. Include the first row, i.e., the header row, when you save `allowlist.csv` as a new file.
+
+### 6. Accessibility testing: second run
+
+Execute the second run on the accessibility test, this time taking into account the contents of the `allowlist.csv`:
+
+```
+axe-scan run --allowlist allowlist.csv > results-allowlisted.csv
+```
+
+Check the created CSV file `results-allowlisted.csv` and see that items in the `allowlist.csv` are not present. In fact, if you have resolved the violations in the previous step, this CSV file should be empty.
+
+### 7. Create a summary report
+
+To create a summary report based on the WCAG Success Criteria, run:
+
+```
+axe-scan summary --allowlist allowlist.csv > summary-allowlisted.csv
+```
+
+After the previous steps, all items should be PASS or INAPPLICABLE.
+
+### 8. Share the files with your team
+
+- `results-allowlisted.csv`
+- `allowlist.csv`
+- `summary-allowlisted.csv`
+
+You can use the `allowlist.csv` for periodical web accessibility tests using axe-scan to easily detect new `violations` and `incomplete` items.
+
+### 9. Use with manual checks
+
+Axe-scan is not a one-size-fits-all accessibility test. There are some WCAG Success Criteria (SC) that axe-scan cannot check, so to create a full checklist of all the WCAG SC, you will have to use axe-scan together with other means like manual reviews or tests using other specialized tools.
 
 ## Installation
 
@@ -96,7 +186,7 @@ To update your installed axe-scan:
 npm update -g axe-scan
 ```
 
-Remove the `-g` option like in the [Install axe-scan section](#install-axe-scan), depending on your needs.
+Remove the `-g` option like in the [Install axe-scan](#install-axe-scan) section, depending on your needs.
 
 ## Usage
 
@@ -188,7 +278,7 @@ Returns an error if `urls.txt` is not found. Optionally designate a custom path 
 axe-scan run --file urls-list.txt --allowlist /path/to/allowlisted-alerts.csv > result-allowlisted.csv
 ```
 
-For details on using the allowlist, see the [Define allowlist section](#define-allowlist).
+For details on using the allowlist, see the [Define allowlist](#define-allowlist) section.
 
 #### Options
 
