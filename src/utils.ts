@@ -81,3 +81,13 @@ export function getConfig(
 function extendConfig(config: Partial<ConfigValue>): ConfigValue {
   return Object.assign(DEFAULT_CONFIG, config);
 }
+
+/**
+ * Replace commas and line breaks in a given text to optimize it
+ * for a cell value in CSV.
+ * @param text Text to convert
+ * @returns The converted text
+ */
+export function convertStringForCsv(text: string): string {
+  return text.replace(/,/g, '-').replace(/(\n|\r|\r\n)/gm, ' ');
+}
