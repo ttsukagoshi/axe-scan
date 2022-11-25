@@ -14,7 +14,12 @@ import {
   SUMMARY_HEADER,
 } from '../constants.js';
 import { MessageLocalization, setAxeLocalization } from '../messages.js';
-import { getConfig, spinner, PartialAxeResults } from '../utils.js';
+import {
+  getConfig,
+  spinner,
+  PartialAxeResults,
+  convertStringForCsv,
+} from '../utils.js';
 
 interface CommandOption {
   readonly file?: string;
@@ -88,8 +93,10 @@ function summarizeAxeResult(
                     .filter((tag: string) => config.axeCoreTags.includes(tag))
                     .join() &&
                 row['Impact'] == element.impact &&
-                row['HTML Element'] == node.html &&
-                row['DOM Element'] == node.target.join() &&
+                convertStringForCsv(row['HTML Element']) ==
+                  convertStringForCsv(node.html) &&
+                convertStringForCsv(row['DOM Element']) ==
+                  convertStringForCsv(node.target.join()) &&
                 row['WCAG Criteria'] ==
                   element.tags
                     .reduce((arr: string[], tag: string) => {
