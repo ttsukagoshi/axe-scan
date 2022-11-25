@@ -75,7 +75,11 @@ function parseKeyValue(keyValue: string | undefined): Partial<ConfigValue> {
       keyValueObj.axeCoreTags = valueArr;
     } else if (key === 'resultTypes') {
       valueArr.forEach((value) => {
-        if (!['violation', 'passes', 'incomplete', 'passes'].includes(value)) {
+        if (
+          !['violations', 'passes', 'incomplete', 'inapplicable'].includes(
+            value
+          )
+        ) {
           throw new AxeScanError(
             localizedMessage.message.text.ERROR_INVALID_VALUE_FOR_RESULTTYPES
           );
