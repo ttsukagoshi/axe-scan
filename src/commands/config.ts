@@ -1,7 +1,11 @@
 import fs from 'fs';
 
 import { AxeScanError } from '../axe-scan-error.js';
-import { ConfigValue, CONFIG_FILE_PATH } from '../constants.js';
+import {
+  ConfigValue,
+  CONFIG_FILE_PATH,
+  RESULT_TYPES_FULL_SET,
+} from '../constants.js';
 import { MessageLocalization } from '../messages.js';
 import { getConfig, CONFIG_FILE_PATH_HOME } from '../utils.js';
 
@@ -75,11 +79,7 @@ function parseKeyValue(keyValue: string | undefined): Partial<ConfigValue> {
       keyValueObj.axeCoreTags = valueArr;
     } else if (key === 'resultTypes') {
       valueArr.forEach((value) => {
-        if (
-          !['violations', 'passes', 'incomplete', 'inapplicable'].includes(
-            value
-          )
-        ) {
+        if (!RESULT_TYPES_FULL_SET.includes(value)) {
           throw new AxeScanError(
             localizedMessage.message.text.ERROR_INVALID_VALUE_FOR_RESULTTYPES
           );
