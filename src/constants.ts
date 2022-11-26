@@ -73,10 +73,3 @@ export const SUMMARY_HEADER: string[] = [
   'Result',
   'axe-scan Version',
 ];
-
-export const RESULT_TYPES: string[] = [
-  'inapplicable',
-  'passes',
-  'incomplete',
-  'violations',
-];
