@@ -37,9 +37,9 @@ const MESSAGES: I18nMessage = {
       INFO_RUNNING: 'Running accessibility scan...',
       INFO_SUMMARY: 'Creating summarized report of the accessibility scan...',
       ERROR_INIT_ABORT: `No overwriting. Aborting ${PACKAGE_NAME} initiation process.`,
-      ERROR_INVALID_VALUE_FOR_RESULTTYPES: `Invalid value for key "resultTypes". Choose one or more of from the following: ${RESULT_TYPES_FULL_SET.join(
+      ERROR_INVALID_VALUE_FOR_RESULTTYPES: `Invalid value for key "resultTypes". Choose one or more of the following: ${RESULT_TYPES_FULL_SET.join(
         ', '
-      )}`,
+      )}.`,
       ERROR_KEY_VALUE_NOT_SET:
         '<key>=<value> must be set when using the --change-value option.\ne.g. axe-scan config --change-value locale=ja\ne.g. axe-scan config -V resultTypes=violation,incomplete,inapplicable',
       PROMPT_CONFIG_FILE_ALREADY_EXISTS:
