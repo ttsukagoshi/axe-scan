@@ -14,7 +14,7 @@ import {
   ReportRowValue,
 } from '../constants.js';
 import { MessageLocalization, setAxeLocalization } from '../messages.js';
-import { getConfig, spinner } from '../utils.js';
+import { getConfig, spinner, convertStringForCsv } from '../utils.js';
 
 interface CommandOption {
   readonly file?: string;
@@ -124,8 +124,10 @@ export default async function (options: CommandOption): Promise<void> {
                     row['Result Type'] == resultType &&
                     row['Rule Set'] == ruleSet &&
                     row['Impact'] == resultItem.impact &&
-                    row['HTML Element'] == node.html &&
-                    row['DOM Element'] == domElement &&
+                    convertStringForCsv(row['HTML Element']) ==
+                      convertStringForCsv(node.html) &&
+                    convertStringForCsv(row['DOM Element']) ==
+                      convertStringForCsv(domElement) &&
                     row['WCAG Criteria'] == wcagCriteria
                 )
               ) {
@@ -146,11 +148,7 @@ export default async function (options: CommandOption): Promise<void> {
                   wcagCriteria, // WCAG Criteria,
                   VERSION, // axe-scan version
                 ]
-                  .map((value) =>
-                    String(value)
-                      .replace(/,/g, '-')
-                      .replace(/(\n|\r|\r\n)/gm, ' ')
-                  )
+                  .map((value) => convertStringForCsv(String(value)))
                   .join();
                 outputText += `\n${outputRow}`;
               }

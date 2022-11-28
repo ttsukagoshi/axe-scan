@@ -1,6 +1,6 @@
 {
   "name": "axe-scan",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "A CLI tool to test web accessibility on multiple web pages based on a list of URLs in a text file.",
   "type": "module",
   "exports": "./build/src/index.js",
