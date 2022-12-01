@@ -1,11 +1,13 @@
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { readPackageUpSync } from 'read-pkg-up';
+import { importMetaUrl } from './import.meta.mjs';
 
 /**
  * Package Info
  */
-export const __dirname: string = dirname(fileURLToPath(import.meta.url));
+// export const __dirname: string = dirname(fileURLToPath(import.meta.url));
+export const __dirname: string = dirname(fileURLToPath(importMetaUrl));
 const manifest = readPackageUpSync({ cwd: __dirname });
 export const [PACKAGE_NAME, PACKAGE_DESC, VERSION] = manifest
   ? [

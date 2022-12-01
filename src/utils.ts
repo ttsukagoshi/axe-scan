@@ -4,7 +4,7 @@ import ora from 'ora';
 import os from 'os';
 import path from 'path';
 
-import { DEFAULT_CONFIG, CONFIG_FILE_PATH, ConfigValue } from './constants.js';
+import { DEFAULT_CONFIG, CONFIG_FILE_PATH, ConfigValue } from './constants';
 
 /**
  * ora - The elegant terminal spinner
