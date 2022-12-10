@@ -59,9 +59,7 @@ export function getConfig(
     // Check for config file in the user's home directory
     if (fs.existsSync(CONFIG_FILE_PATH_HOME)) {
       return extendConfig(
-        JSON.parse(
-          fs.readFileSync(`${os.homedir()}/${CONFIG_FILE_PATH}`).toString()
-        )
+        JSON.parse(fs.readFileSync(CONFIG_FILE_PATH_HOME).toString())
       );
     } else {
       return DEFAULT_CONFIG;
@@ -79,7 +77,8 @@ export function getConfig(
  * @returns The full ConfigValue object.
  */
 function extendConfig(config: Partial<ConfigValue>): ConfigValue {
-  return Object.assign(DEFAULT_CONFIG, config);
+  const defaultConfig: ConfigValue = JSON.parse(JSON.stringify(DEFAULT_CONFIG));
+  return Object.assign(defaultConfig, config);
 }
 
 /**
