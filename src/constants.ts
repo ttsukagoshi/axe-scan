@@ -19,16 +19,16 @@ export const [PACKAGE_NAME, PACKAGE_DESC, VERSION] = manifest
  * Default configuration
  */
 export type ConfigValue = {
-  axeCoreTags: string[];
-  resultTypes: string[];
+  axeCoreTags: string[]; // See https://www.deque.com/axe/core-documentation/api-documentation/#user-content-axe-core-tags for possible values
+  resultTypes: string[]; // Possible values are elements of RESULT_TYPES_FULL_SET
   filePath: string;
   // encoding: string;
   locale: string;
 };
 export const DEFAULT_LOCALE = 'en';
 export const DEFAULT_CONFIG: ConfigValue = {
-  axeCoreTags: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'], // See https://www.deque.com/axe/core-documentation/api-documentation/#user-content-axe-core-tags for possible values
-  resultTypes: ['incomplete', 'violations'], // Possible values are elements of RESULT_TYPES_FULL_SET
+  axeCoreTags: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'],
+  resultTypes: ['incomplete', 'violations'],
   filePath: './urls.txt',
   // encoding: 'utf8',
   locale: `${DEFAULT_LOCALE}`,
