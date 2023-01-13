@@ -68,12 +68,16 @@ program
   .command('run')
   .description('Run the accessibility test.')
   .option(
+    '-A, --allowlist <allowlistFilePath>',
+    'Designate the file path for the allowlist of accessibility alerts.'
+  )
+  .option(
     '-F, --file <urlsFilePath>',
     'Designate the file path for the list of URLs on which to conduct the accessibility test.'
   )
   .option(
-    '-A, --allowlist <allowlistFilePath>',
-    'Designate the file path for the allowlist of accessibility alerts.'
+    '-R, --raw',
+    'Output the raw axe-core result in stringified JSON instead of the usual CSV.'
   )
   .action(run);
 
