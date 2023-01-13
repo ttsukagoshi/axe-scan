@@ -54,7 +54,7 @@
   "dependencies": {
     "@axe-core/puppeteer": "^4.5.2",
     "commander": "^9.4.1",
-    "csv-parse": "^5.3.2",
+    "csv-parse": "^5.3.3",
     "inquirer": "^9.1.4",
     "loud-rejection": "^2.2.0",
     "ora": "^6.1.2",
