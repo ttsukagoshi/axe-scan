@@ -75,10 +75,6 @@ program
     '-A, --allowlist <allowlistFilePath>',
     'Designate the file path for the allowlist of accessibility alerts.'
   )
-  .option(
-    '-W, --whitelist <allowlistFilePath>',
-    'Alias of --allowlist. Scheduled to be deprecated on v2.0. Consider using --allowlist option instead.'
-  ) // Scheduled to be deprecated on v2.0
   .action(run);
 
 program
@@ -95,10 +91,6 @@ program
     '-A, --allowlist <allowlistFilePath>',
     'Designate the file path for the allowlist of accessibility alerts.'
   )
-  .option(
-    '-W, --whitelist <allowlistFilePath>',
-    'Alias of --allowlist. Scheduled to be deprecated on v2.0. Consider using --allowlist option instead.'
-  ) // Scheduled to be deprecated on v2.0
   .action(summary);
 
 (async () => {
