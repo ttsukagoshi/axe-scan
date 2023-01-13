@@ -25,7 +25,6 @@ interface CommandOption {
   readonly file?: string;
   readonly page?: boolean;
   readonly allowlist?: string;
-  readonly whitelist?: string; // Scheduled to be deprecated on v2.0
 }
 interface AllPagesReportSummary {
   [key: string]: ReportSummary;
@@ -178,7 +177,6 @@ function summarizeAxeResult(
  * @param {string} options.file File path to the text file containing the list of URLs.
  * @param {boolean} options.page When set, the report will be generated per page.
  * @param {string} options.allowlist File path to the CSV file containing the allowlisted alerts to be ommited from the output.
- * @param {string} options.whitelist Alias of options.allowlist. Scheduled to be deprecated on v2.0
  */
 export default async function (options: CommandOption): Promise<void> {
   // Start spinner
@@ -196,20 +194,9 @@ export default async function (options: CommandOption): Promise<void> {
     .split(',');
 
   // Optional allowlisted items
-  /* Use this script after --whitelist option is deprecated in >= v2.0
   const allowlist: ReportRowValue[] | undefined = options?.allowlist
     ? parse(fs.readFileSync(options.allowlist), { columns: true })
     : undefined;
-  */
-  let allowlist: ReportRowValue[] | undefined = undefined;
-  if (options?.allowlist || options?.whitelist) {
-    // options.whitelist is scheduled to be deprecated on v2.0
-    if (options.allowlist) {
-      allowlist = parse(fs.readFileSync(options.allowlist), { columns: true });
-    } else if (options.whitelist) {
-      allowlist = parse(fs.readFileSync(options.whitelist), { columns: true });
-    }
-  }
 
   // Optional page flag
   const outputByPage: boolean = options?.page ? true : false;
