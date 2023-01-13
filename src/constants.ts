@@ -52,6 +52,8 @@ export const REPORT_HEADER: string[] = [
   'URL',
   'Rule Type', // rule ID
   'Result Type', // inapplicable, incomplete, passes, or violations
+  'Result Condition', // all, none, or any
+  'Result Condition Index', // results with the same index have the common result conditions
   'Rule Set', // wcag2aa etc.
   'Impact', // "minor", "moderate", "serious", or "critical"
   'Message',
