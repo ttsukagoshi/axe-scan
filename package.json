@@ -34,7 +34,7 @@
   },
   "homepage": "https://github.com/ttsukagoshi/axe-scan#readme",
   "devDependencies": {
-    "@babel/core": "^7.21.0",
+    "@babel/core": "^7.21.4",
     "@babel/preset-env": "^7.21.4",
     "@babel/preset-typescript": "^7.21.4",
     "@types/inquirer": "^9.0.3",
