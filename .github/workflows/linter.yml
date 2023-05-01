@@ -49,7 +49,7 @@ jobs:
       ################################
       - name: Lint Code Base
         # uses: github/super-linter@v4
-        uses: github/super-linter/slim@v4 # See https://github.com/github/super-linter#images
+        uses: github/super-linter/slim@v5 # See https://github.com/github/super-linter#images
         env:
           VALIDATE_ALL_CODEBASE: true
           VALIDATE_JAVASCRIPT_ES: true
