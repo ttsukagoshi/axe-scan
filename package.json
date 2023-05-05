@@ -53,7 +53,7 @@
   },
   "dependencies": {
     "@axe-core/puppeteer": "^4.6.1",
-    "commander": "^9.5.0",
+    "commander": "^10.0.1",
     "csv-parse": "^5.3.6",
     "inquirer": "^9.1.5",
     "loud-rejection": "^2.2.0",
