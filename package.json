@@ -55,7 +55,7 @@
     "@axe-core/puppeteer": "^4.6.1",
     "commander": "^9.5.0",
     "csv-parse": "^5.3.6",
-    "inquirer": "^9.1.5",
+    "inquirer": "^9.2.1",
     "loud-rejection": "^2.2.0",
     "ora": "^6.3.0",
     "read-pkg-up": "^9.1.0"
