@@ -3,6 +3,9 @@
   "version": "2.0.1",
   "description": "A CLI tool to test web accessibility on multiple web pages based on a list of URLs in a text file.",
   "type": "module",
+  "engines": {
+    "node": ">=16.0.0"
+  },
   "exports": "./build/src/index.js",
   "main": "build/src/index.js",
   "bin": {
