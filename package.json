@@ -52,7 +52,7 @@
     "typescript": "^5.0.3"
   },
   "dependencies": {
-    "@axe-core/puppeteer": "^4.6.1",
+    "@axe-core/puppeteer": "^4.7.3",
     "commander": "^9.5.0",
     "csv-parse": "^5.4.0",
     "inquirer": "^9.1.5",
