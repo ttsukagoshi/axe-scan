@@ -56,6 +56,7 @@ export default async function (options: CommandOption): Promise<void> {
   const urls: string[] = fs
     .readFileSync(filePath /*, { encoding: config.encoding }*/)
     .toString()
+    .trim()
     .replace(/\r?\n/g, ',')
     .split(',');
 
@@ -71,7 +72,12 @@ export default async function (options: CommandOption): Promise<void> {
   let outputText: string = raw ? '' : REPORT_HEADER.join();
   const rawAxeResults: RawAxeResults = {};
   for (let i = 0; i < urls.length; i++) {
-    const url: string = urls[i];
+    const url: string = urls[i].trim();
+
+    if (!url) {
+      continue;
+    }
+
     const page: puppeteer.Page = await browser.newPage();
     await page.setBypassCSP(true);
     /* Emulate device: left here as a potential option for the future
